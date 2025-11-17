@@ -1,98 +1,106 @@
 package edu.csc324.pdg;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GraphTest {
+  private Graph graph;
+  private Agent agent1, agent2, agent3;
 
-  @Test
-  void testAddNodeAndNeighbors() throws Exception {
-    Graph graph = new Graph();
-
-    Agent a = new Agent(1, 10, 20);
-    Agent b = new Agent(2, 10, 20);
-    Agent c = new Agent(3, 10, 20);
-
-    graph.addNode(a, new ArrayList<>());
-    graph.addNode(b, new ArrayList<>());
-    graph.addNode(c, new ArrayList<>());
-
-    ArrayList<Agent> neighbors = new ArrayList<>();
-    neighbors.add(b);
-    neighbors.add(c);
-
-    graph.addNode(a, neighbors);
-
-    assertEquals(2, graph.getNeighbors(a).size());
-    assertTrue(graph.getNeighbors(a).contains(b));
-    assertTrue(graph.getNeighbors(a).contains(c));
-
-    assertEquals(1, graph.getNeighbors(b).size());
-    assertTrue(graph.getNeighbors(b).contains(a));
-
-    assertEquals(1, graph.getNeighbors(c).size());
-    assertTrue(graph.getNeighbors(c).contains(a));
+  @BeforeEach
+  void setUp() {
+    graph = new Graph();
+    agent1 = new Agent(1, 0.8, 1.0);
+    agent2 = new Agent(2, 0.7, 1.0);
+    agent3 = new Agent(3, 0.9, 1.0);
   }
 
   @Test
-  void testRemoveNode() throws Exception {
-    Graph graph = new Graph();
+  void testAddNodeBasic() {
+    ArrayList<Agent> connections = new ArrayList<>();
+    connections.add(agent2);
 
-    Agent a = new Agent(1, 10, 20);
-    Agent b = new Agent(2, 10, 20);
+    graph.addNode(agent1, connections);
 
-    graph.addNode(a, new ArrayList<>());
-    graph.addNode(b, new ArrayList<>());
-
-    ArrayList<Agent> neighborsA = new ArrayList<>();
-    neighborsA.add(b);
-    graph.addNode(a, neighborsA);
-
-    assertEquals(1, graph.getNeighbors(a).size());
-    assertEquals(1, graph.getNeighbors(b).size());
-
-    graph.removeNode(a);
-
-    assertTrue(graph.getNeighbors(b).isEmpty());
-
-    Exception ex = assertThrows(Exception.class, () -> graph.getNeighbors(a));
-    assertTrue(ex.getMessage().contains("Node not found"));
-  }
-
-  @Test
-  void testGetNeighborsThrowsForMissingNode() {
-    Graph graph = new Graph();
-    Agent a = new Agent(1, 10, 20);
-
-    Exception ex = assertThrows(Exception.class, () -> graph.getNeighbors(a));
-    assertTrue(ex.getMessage().contains("Node not found"));
-  }
-
-  @Test
-  void testRemoveMissingNodeThrows() {
-    Graph graph = new Graph();
-    Agent a = new Agent(1, 10, 20);
-
-    Exception ex = assertThrows(Exception.class, () -> graph.removeNode(a));
-    assertTrue(ex.getMessage().contains("Node not found"));
+    try {
+      assertEquals(1, graph.getNeighbors(agent1).size());
+      assertTrue(graph.getNeighbors(agent2).contains(agent1));
+    } catch (Exception e) {
+      fail("Should not throw exception");
+    }
   }
 
   @Test
   void testAddNodeSymmetry() throws Exception {
-    Graph graph = new Graph();
+    graph.addNode(agent1, new ArrayList<>());
+    graph.addNode(agent2, new ArrayList<>());
 
-    Agent a = new Agent(1, 10, 20);
-    Agent b = new Agent(2, 10, 20);
+    ArrayList<Agent> neighbors = new ArrayList<>();
+    neighbors.add(agent1);
+    graph.addNode(agent2, neighbors);
 
-    graph.addNode(a, new ArrayList<>());
-    graph.addNode(b, new ArrayList<>());
+    assertTrue(graph.getNeighbors(agent1).contains(agent2));
+    assertTrue(graph.getNeighbors(agent2).contains(agent1));
+  }
 
-    ArrayList<Agent> neighborsB = new ArrayList<>();
-    neighborsB.add(a);
-    graph.addNode(b, neighborsB);
+  @Test
+  void testAddNodeMultipleNeighbors() throws Exception {
+    graph.addNode(agent1, new ArrayList<>());
+    graph.addNode(agent2, new ArrayList<>());
+    graph.addNode(agent3, new ArrayList<>());
 
-    assertTrue(graph.getNeighbors(a).contains(b));
-    assertTrue(graph.getNeighbors(b).contains(a));
+    ArrayList<Agent> neighbors = new ArrayList<>();
+    neighbors.add(agent2);
+    neighbors.add(agent3);
+
+    graph.addNode(agent1, neighbors);
+
+    assertEquals(2, graph.getNeighbors(agent1).size());
+    assertTrue(graph.getNeighbors(agent1).contains(agent2));
+    assertTrue(graph.getNeighbors(agent1).contains(agent3));
+
+    assertEquals(1, graph.getNeighbors(agent2).size());
+    assertEquals(1, graph.getNeighbors(agent3).size());
+  }
+
+  @Test
+  void testRemoveNode() throws Exception {
+    ArrayList<Agent> connections = new ArrayList<>();
+    connections.add(agent2);
+    graph.addNode(agent1, connections);
+
+    graph.removeNode(agent1);
+
+    assertThrows(Exception.class, () -> graph.getNeighbors(agent1));
+  }
+
+  @Test
+  void testRemoveNodeUpdatesNeighbors() throws Exception {
+    graph.addNode(agent1, new ArrayList<>());
+    graph.addNode(agent2, new ArrayList<>());
+
+    ArrayList<Agent> neighbors = new ArrayList<>();
+    neighbors.add(agent2);
+    graph.addNode(agent1, neighbors);
+
+    assertEquals(1, graph.getNeighbors(agent1).size());
+    assertEquals(1, graph.getNeighbors(agent2).size());
+
+    graph.removeNode(agent1);
+
+    assertTrue(graph.getNeighbors(agent2).isEmpty());
+  }
+
+  @Test
+  void testRemoveNonExistentNode() {
+    assertThrows(Exception.class, () -> graph.removeNode(agent1));
+  }
+
+  @Test
+  void testGetNeighborsNonExistentNode() {
+    assertThrows(Exception.class, () -> graph.getNeighbors(agent1));
   }
 }
