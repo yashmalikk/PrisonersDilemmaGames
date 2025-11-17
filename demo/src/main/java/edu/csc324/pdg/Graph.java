@@ -13,10 +13,10 @@ public class Graph {
     }
 
     public void addNode(Agent agent, ArrayList<Agent> connections) {
-        this.adjacency_list.put(agent, connections);
+        this.adjacency_list.put(agent, new ArrayList<>(connections));
 
         for (Agent neighbor : connections) {
-            this.adjacency_list.get(neighbor).add(agent);
+            this.adjacency_list.computeIfAbsent(neighbor, k -> new ArrayList<>()).add(agent);
         }
     }
 
