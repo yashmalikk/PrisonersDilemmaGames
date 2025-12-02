@@ -1,0 +1,49 @@
+PRISONER'S DILEMMA GAME IMPLEMENTATION STATUS
+===========================================
+
+CURRENT IMPLEMENTATION:
+- Driver.java: Complete with all required methods
+- Agent.java: Extended with strategy and payoff fields
+- Graph.java: Extended with getAllAgents() method and 2D grid generator
+
+WHAT'S IMPLEMENTED:
+1. Prisoner's Dilemma payoff matrix (R=1, T=1.5, S=0, P=0)
+2. Game rounds with 3 phases: payoff calculation, agent removal, strategy update
+3. Agent cooperation/defection strategies
+4. Payoff-based agent failure mechanism
+5. Strategy imitation from successful neighbors
+
+CURRENT STATUS: Cannot run yet - missing main method logic
+
+TO MAKE IT RUNNABLE:
+1. Add simulation setup in main() method:
+   - Create graph with agents
+   - Add connections between agents
+   - Run simulation rounds
+   - Display results
+
+2. Example addition to main():
+   ```java
+   Driver driver = new Driver();
+   Graph graph = new Graph();
+   
+   // Generate 5x5 grid network
+   graph.generate2DGrid(5, 0.5, 10.0);
+   
+   // Run simulation
+   driver.runPDGRounds(graph, 10);
+   ```
+
+HOW TO RUN:
+1. Navigate to project directory
+2. Compile: javac -cp demo/src/main/java demo/src/main/java/edu/csc324/pdg/*.java
+3. Run: java -cp demo/src/main/java edu.csc324.pdg.Driver
+
+TOPOLOGY GENERATORS:
+- 2D Grid: generate2DGrid(size, threshold, capacity)
+  Creates size x size grid where each agent connects to 4 neighbors
+
+NEXT STEPS:
+- Implement main() method with simulation setup
+- Add result visualization/logging
+- Test grid topology with different sizes

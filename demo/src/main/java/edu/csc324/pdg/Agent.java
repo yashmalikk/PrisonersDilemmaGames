@@ -1,5 +1,7 @@
 package edu.csc324.pdg;
 
+import java.util.Random;
+
 /**
  * Represents an agent in the network with load capacity and failure threshold
  */
@@ -9,6 +11,9 @@ public class Agent {
   private double threshold; // Load threshold before failure
   private double load; // Current load on agent
   private double capacity; // Maximum load capacity
+  private boolean strategy; // true = cooperate, false = defect
+  private double payoff; // Current payoff from games
+  private static final Random random = new Random();
 
   public Agent(int id, double threshold, double capacity) {
     this.id = id;
@@ -16,6 +21,8 @@ public class Agent {
     this.capacity = capacity;
     this.isActive = true;
     this.load = 0.0;
+    this.strategy = random.nextBoolean(); // Random initial strategy
+    this.payoff = 0.0;
   }
 
   public int getId() {
@@ -44,6 +51,30 @@ public class Agent {
 
   public double getCapacity() {
     return capacity;
+  }
+
+  public boolean getStrategy() {
+    return strategy;
+  }
+
+  public void setStrategy(boolean strategy) {
+    this.strategy = strategy;
+  }
+
+  public double getPayoff() {
+    return payoff;
+  }
+
+  public void setPayoff(double payoff) {
+    this.payoff = payoff;
+  }
+
+  public void addPayoff(double payoff) {
+    this.payoff += payoff;
+  }
+
+  public boolean chooseAction() {
+    return strategy;
   }
 
   // Checks if agent should fail based on load exceeding threshold

@@ -40,4 +40,38 @@ public class Graph {
 
     return this.adjacency_list.get(agent);
   }
+
+  public ArrayList<Agent> getAllAgents() {
+    return new ArrayList<>(this.adjacency_list.keySet());
+  }
+
+  public void generate2DToroidalGrid(int size, double threshold, double capacity) {
+    Agent[][] grid = new Agent[size][size];
+
+    // Create agents
+    for (int i = 0; i < size; i++) {
+      for (int j = 0; j < size; j++) {
+        grid[i][j] = new Agent(i * size + j, threshold, capacity);
+      }
+    }
+
+    // Connect with wrap-around neighbors
+    for (int i = 0; i < size; i++) {
+      for (int j = 0; j < size; j++) {
+
+        int up = (i - 1 + size) % size;
+        int down = (i + 1) % size;
+        int left = (j - 1 + size) % size;
+        int right = (j + 1) % size;
+
+        ArrayList<Agent> neighbors = new ArrayList<>();
+        neighbors.add(grid[up][j]);
+        neighbors.add(grid[down][j]);
+        neighbors.add(grid[i][left]);
+        neighbors.add(grid[i][right]);
+
+        adjacency_list.put(grid[i][j], neighbors);
+      }
+    }
+  }
 }
