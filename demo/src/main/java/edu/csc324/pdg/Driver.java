@@ -49,7 +49,7 @@ public class Driver {
       System.out.println("Starting simulation with " + totalAgents + " agents (" + gridSize + "x" + gridSize + " grid)");
       System.out.println("Initial: " + initialCooperators + " cooperators, " + numDefectors + " defectors");
       System.out.println("Rounds: " + numRounds);
-      System.out.println("Blue = Cooperator, Red = Defector, Grey = Dead");
+      System.out.println("Blue = Cooperator, Yellow = Defector");
       
       // Show initial state
       viz.updateGraph(graph);
@@ -61,9 +61,9 @@ public class Driver {
         System.out.println("\nRound " + (round + 1));
         driver.calculatePayoffs(graph);
         
-        int beforeRemoval = graph.getActiveAgents().size();
+        int beforeRemoval = graph.getAllAgents().size();
         driver.removeAgents(graph);
-        int afterRemoval = graph.getActiveAgents().size();
+        int afterRemoval = graph.getAllAgents().size();
         
         System.out.println("Agents removed: " + (beforeRemoval - afterRemoval));
         System.out.println("Survivors: " + afterRemoval);
@@ -77,11 +77,11 @@ public class Driver {
         
         // Update visualization
         viz.updateGraph(graph);
-        viz.sleep(1500);
+        viz.sleep(200);
       }
       
       // Print final results
-      ArrayList<Agent> survivors = graph.getActiveAgents();
+      ArrayList<Agent> survivors = graph.getAllAgents();
       int cooperators = 0;
       for (Agent agent : survivors) {
         if (agent.getStrategy()) cooperators++;
@@ -153,7 +153,8 @@ public class Driver {
     
     for (Agent agent : agents) {
       if (agent.isActive() && agent.getPayoff() < agent.getThreshold()) {
-        agent.fail(); // Just mark as failed, don't remove from graph
+        agent.fail();
+        graph.removeNode(agent);
       }
     }
   }

@@ -20,13 +20,12 @@ public class Visualizer {
             "  text-alignment: center; " +
             "  text-size: 5000px; " +
             "  text-color: white; " +
-            "  fill-color: red; " +
+            "  fill-color: orange; " +
             "  stroke-mode: plain; " +
             "  stroke-color: black; " +
             "  stroke-width: 2px; " +
             "} " +
             "node.cooperator { fill-color: blue; } " +
-            "node.dead { fill-color: gray; } " +
             "edge { fill-color: gray; size: 2px; }");
         gsGraph.setAttribute("ui.antialias");
         gsGraph.setAttribute("ui.quality");
@@ -57,16 +56,13 @@ public class Visualizer {
             int col = agent.getId() % gridSize;
             node.setAttribute("xy", col * 2, -row * 2); // Spread out more
             
-            // Set color based on agent status and strategy
-            if (!agent.isActive()) {
-                node.setAttribute("ui.class", "dead");
-                node.setAttribute("ui.style", "fill-color: gray;");
-            } else if (agent.getStrategy()) {
+            // Set color based on strategy (all agents in graph are active)
+            if (agent.getStrategy()) {
                 node.setAttribute("ui.class", "cooperator");
                 node.setAttribute("ui.style", "fill-color: blue;");
             } else {
                 node.removeAttribute("ui.class");
-                node.setAttribute("ui.style", "fill-color: red;");
+                node.setAttribute("ui.style", "fill-color: orange;");
             }
         }
         
