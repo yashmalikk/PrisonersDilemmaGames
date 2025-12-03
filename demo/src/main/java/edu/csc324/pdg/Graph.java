@@ -44,6 +44,16 @@ public class Graph {
   public ArrayList<Agent> getAllAgents() {
     return new ArrayList<>(this.adjacency_list.keySet());
   }
+  
+  public ArrayList<Agent> getActiveAgents() {
+    ArrayList<Agent> activeAgents = new ArrayList<>();
+    for (Agent agent : this.adjacency_list.keySet()) {
+      if (agent.isActive()) {
+        activeAgents.add(agent);
+      }
+    }
+    return activeAgents;
+  }
 
   public void generate2DToroidalGrid(int size, double threshold, double capacity) {
     Agent[][] grid = new Agent[size][size];

@@ -21,7 +21,7 @@ public class Agent {
     this.capacity = capacity;
     this.isActive = true;
     this.load = 0.0;
-    this.strategy = random.nextBoolean(); // Random initial strategy
+    this.strategy = true; // Default to cooperator
     this.payoff = 0.0;
   }
 
