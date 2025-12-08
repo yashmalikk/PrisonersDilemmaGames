@@ -13,7 +13,11 @@ WHAT'S IMPLEMENTED:
 4. Payoff-based agent failure mechanism
 5. Strategy imitation from successful neighbors
 
-CURRENT STATUS: Cannot run yet - missing main method logic
+CURRENT STATUS:            Opponent
+           Coop  Defect
+You  Coop   R      S
+     Defect T      P
+Cannot run yet - missing main method logic
 
 TO MAKE IT RUNNABLE:
 1. Add simulation setup in main() method:

@@ -27,8 +27,19 @@ public class Driver {
       
       int totalAgents = gridSize * gridSize;
       
+      // Get user input for grid type
+      System.out.print("Choose grid type (1=2D4N, 2=2D8N): ");
+      int gridType = scanner.nextInt();
+      if (gridType != 1 && gridType != 2) gridType = 1;
+      
       // Create grid network with alpha=0.4 threshold
-      graph.generate2DToroidalGrid(gridSize, 0.4, 10.0);
+      if (gridType == 1) {
+        graph.generate2DToroidalGrid(gridSize, 0.4, 10.0);
+        System.out.println("Using 2D4N grid (4 neighbors per agent)");
+      } else {
+        graph.generate2DToroidal8Grid(gridSize, 0.4, 10.0);
+        System.out.println("Using 2D8N grid (8 neighbors per agent)");
+      }
       
       // Get user input for number of defectors
       System.out.print("Enter number of defectors (0-" + totalAgents + "): ");

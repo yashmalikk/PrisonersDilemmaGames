@@ -65,7 +65,7 @@ public class Graph {
       }
     }
 
-    // Connect with wrap-around neighbors
+    // Connect with wrap-around neighbors (4 neighbors)
     for (int i = 0; i < size; i++) {
       for (int j = 0; j < size; j++) {
 
@@ -79,6 +79,42 @@ public class Graph {
         neighbors.add(grid[down][j]);
         neighbors.add(grid[i][left]);
         neighbors.add(grid[i][right]);
+
+        adjacency_list.put(grid[i][j], neighbors);
+      }
+    }
+  }
+  
+  public void generate2DToroidal8Grid(int size, double threshold, double capacity) {
+    Agent[][] grid = new Agent[size][size];
+
+    // Create agents
+    for (int i = 0; i < size; i++) {
+      for (int j = 0; j < size; j++) {
+        grid[i][j] = new Agent(i * size + j, threshold, capacity);
+      }
+    }
+
+    // Connect with wrap-around neighbors (8 neighbors including diagonals)
+    for (int i = 0; i < size; i++) {
+      for (int j = 0; j < size; j++) {
+
+        int up = (i - 1 + size) % size;
+        int down = (i + 1) % size;
+        int left = (j - 1 + size) % size;
+        int right = (j + 1) % size;
+
+        ArrayList<Agent> neighbors = new ArrayList<>();
+        // 4 cardinal directions
+        neighbors.add(grid[up][j]);
+        neighbors.add(grid[down][j]);
+        neighbors.add(grid[i][left]);
+        neighbors.add(grid[i][right]);
+        // 4 diagonal directions
+        neighbors.add(grid[up][left]);
+        neighbors.add(grid[up][right]);
+        neighbors.add(grid[down][left]);
+        neighbors.add(grid[down][right]);
 
         adjacency_list.put(grid[i][j], neighbors);
       }
